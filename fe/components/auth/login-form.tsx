@@ -1,4 +1,7 @@
 "use client"
+
+import type React from "react"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -9,20 +12,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { Eye, EyeOff, Loader2, User, UserCheck } from "lucide-react"
 
-export function LoginForm({ onForgotPassword }) {
+interface LoginFormProps {
+  onForgotPassword: () => void
+}
+
+export function LoginForm({ onForgotPassword }: LoginFormProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [role, setRole] = useState("") // Added role selection
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<{ email?: string; password?: string; role?: string }>({})
 
   const router = useRouter()
   const { toast } = useToast()
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors: { email?: string; password?: string; role?: string } = {}
 
     if (!email) {
       newErrors.email = "Email is required"
@@ -44,7 +51,7 @@ export function LoginForm({ onForgotPassword }) {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) return
@@ -176,7 +183,11 @@ export function LoginForm({ onForgotPassword }) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Checkbox id="remember" checked={rememberMe} onCheckedChange={(checked) => setRememberMe(checked)} />
+            <Checkbox
+              id="remember"
+              checked={rememberMe}
+              onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+            />
             <Label htmlFor="remember" className="text-sm">
               Remember me
             </Label>
