@@ -26,6 +26,7 @@ import {
   User,
   Settings,
   LogOut,
+  Flower
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
@@ -61,12 +62,13 @@ const authenticatedNavigationItems = [
   { href: "/mood", label: "Mood Tracker", icon: MoodIcon },
   { href: "/journal", label: "Journal", icon: BookOpen },
   { href: "/assessments", label: "Assessments", icon: ClipboardList },
-  { href: "/modules", label: "Learning", icon: GraduationCap },
+  // { href: "/modules", label: "Learning", icon: GraduationCap },
   { href: "/cbt", label: "CBT", icon: Stethoscope },
   { href: "/chat", label: "Chat", icon: MessageCircle },
   { href: "/community", label: "Community", icon: Users },
   { href: "/resources", label: "Resources", icon: Library },
   { href: "/telehealth", label: "Telehealth", icon: Stethoscope },
+  { href: "/garden", label: "Garden", icon: Flower },
 
 ]
 
@@ -86,7 +88,8 @@ export function Navigation() {
     pathname.startsWith("/telehealth") ||
     pathname.startsWith("/profile") ||
     pathname.startsWith("/settings") ||
-    pathname.startsWith("/counselor");
+    pathname.startsWith("/counselor") ||
+    pathname.startsWith("/garden");
 
 // Check if user is on counselor routes
 const isCounselorPath = pathname.startsWith("/counselor");
@@ -128,7 +131,7 @@ if (isAuthenticated) {
   )
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="ml-5 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-2">
