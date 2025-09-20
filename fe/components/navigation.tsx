@@ -43,6 +43,17 @@ const publicNavigationItems = [
   { href: "/resources", label: "Resources", icon: Library },
   { href: "/about", label: "About Us", icon: Info },
   { href: "/contact", label: "Contact", icon: Phone },
+  { href: "/counsellorchatuser", label: "CChat with User", icon: Phone },
+
+]
+
+const counselorNavigationItems = [
+  { href: "/", label: "Home", icon: Home },
+  { href: "/resources", label: "Resources", icon: Library },
+  { href: "/about", label: "About Us", icon: Info },
+  { href: "/contact", label: "Contact", icon: Phone },
+  { href: "/counsellorchatuser", label: "Chat with User", icon: Phone },
+
 ]
 
 const authenticatedNavigationItems = [
@@ -51,10 +62,12 @@ const authenticatedNavigationItems = [
   { href: "/journal", label: "Journal", icon: BookOpen },
   { href: "/assessments", label: "Assessments", icon: ClipboardList },
   { href: "/modules", label: "Learning", icon: GraduationCap },
+  { href: "/cbt", label: "CBT", icon: Stethoscope },
   { href: "/chat", label: "Chat", icon: MessageCircle },
   { href: "/community", label: "Community", icon: Users },
   { href: "/resources", label: "Resources", icon: Library },
   { href: "/telehealth", label: "Telehealth", icon: Stethoscope },
+
 ]
 
 export function Navigation() {
@@ -72,9 +85,20 @@ export function Navigation() {
     pathname.startsWith("/community") ||
     pathname.startsWith("/telehealth") ||
     pathname.startsWith("/profile") ||
-    pathname.startsWith("/settings")
+    pathname.startsWith("/settings") ||
+    pathname.startsWith("/counselor");
 
-  const navigationItems = isAuthenticated ? authenticatedNavigationItems : publicNavigationItems
+// Check if user is on counselor routes
+const isCounselorPath = pathname.startsWith("/counselor");
+  // const navigationItems = isAuthenticated ? authenticatedNavigationItems : publicNavigationItems
+let navigationItems;
+if (isAuthenticated) {
+  navigationItems = isCounselorPath
+    ? counselorNavigationItems
+    : authenticatedNavigationItems;
+} else {
+  navigationItems = publicNavigationItems;
+}
 
   const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
     <>
@@ -173,9 +197,9 @@ export function Navigation() {
             </DropdownMenu>
           ) : (
             <div className="hidden sm:flex items-center gap-2">
-              <Button variant="ghost" asChild>
+              {/* <Button variant="ghost" asChild>
                 <Link href="/auth">Sign In</Link>
-              </Button>
+              </Button> */}
               <Button asChild>
                 <Link href="/auth">Get Started</Link>
               </Button>
