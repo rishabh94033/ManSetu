@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -135,14 +136,14 @@ const mockPeerChats = [
 const mockCounselorChats = [
   {
     id: 1,
-    name: "Dr. Sarah Johnson",
-    lastMessage: "How did your presentation go?",
+    name: "Counselor X",
+    lastMessage: "I am here to help you.",
     isOnline: true,
     time: "5m ago",
     messages: [
       {
         id: 1,
-        sender: "Dr. Sarah Johnson",
+        sender: "Dr. Sara",
         content: "Hi! How are you feeling after our last session?",
         time: "2:00 PM",
         isOwn: false,
@@ -163,17 +164,7 @@ const mockCounselorChats = [
       },
     ],
   },
-  {
-    id: 2,
-    name: "Dr. Michael Chen",
-    lastMessage: "Let's schedule our next session",
-    isOnline: false,
-    time: "2h ago",
-    messages: [
-      { id: 1, sender: "Dr. Michael Chen", content: "Let's schedule our next session", time: "11:00 AM", isOwn: false },
-      { id: 2, sender: "You", content: "How about Thursday at 3 PM?", time: "11:05 AM", isOwn: true },
-    ],
-  },
+  
 ]
 
 const emojiCategories = {
@@ -194,20 +185,24 @@ export default function ChatPage() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showCreateGroup, setShowCreateGroup] = useState(false)
   const [newGroupName, setNewGroupName] = useState("")
-  const [newGroupDescription, setNewGroupDescription] = useState("")
   const [isAnonymous, setIsAnonymous] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" })
+    }
   }
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    requestAnimationFrame(() => {
+      scrollToBottom()
+    })
+  }, [messages, selectedChat?.messages])
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim()) {
       const userMessage = {
         id: Date.now(),
@@ -219,7 +214,6 @@ export default function ChatPage() {
       }
 
       if (selectedChat && activeTab !== "ai") {
-        // Update selected chat messages
         setSelectedChat((prev) => ({
           ...prev,
           messages: [...(prev.messages || []), userMessage],
@@ -228,7 +222,6 @@ export default function ChatPage() {
         setMessages((prev) => [...prev, userMessage])
       }
 
-      // Crisis detection
       const messageText = newMessage.toLowerCase()
       const containsCrisisKeywords = crisisKeywords.some((keyword) => messageText.includes(keyword.toLowerCase()))
 
@@ -236,35 +229,49 @@ export default function ChatPage() {
         setShowCrisisAlert(true)
       }
 
-      // AI response simulation for AI tab
-      if (activeTab === "ai") {
-        setIsTyping(true)
-        setTimeout(() => {
-          let aiResponse = ""
+      try {
+        const res = await fetch("http://localhost:5000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: messageText }),
+        })
 
-          if (containsCrisisKeywords) {
-            aiResponse =
-              "I'm very concerned about what you've shared. Your safety is the most important thing right now. Please consider reaching out to a mental health professional immediately. Would you like me to help you connect with a counselor?"
-          } else if (messageText.includes("anxious") || messageText.includes("anxiety")) {
-            aiResponse =
-              "I understand you're experiencing anxiety. Have you tried the 5-4-3-2-1 grounding technique? It can help bring you back to the present moment."
-          } else {
-            aiResponse =
-              "Thank you for sharing that with me. I'm here to listen and support you. Can you tell me more about how you've been coping with these feelings?"
-          }
+        const data = await res.json()
 
-          const aiMessage = {
-            id: Date.now() + 1,
-            sender: "MindWell AI",
-            content: aiResponse,
-            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        if (data.reply) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: prev.length + 1,
+              sender: "AI",
+              content: data.reply,
+              time: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              isOwn: false,
+              isAI: true,
+            },
+          ])
+        }
+      } catch (error) {
+        console.error("AI chat error:", error)
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: prev.length + 1,
+            sender: "AI",
+            content: "Sorry, I'm having trouble responding right now.",
+            time: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
             isOwn: false,
             isAI: true,
-          }
-
-          setMessages((prev) => [...prev, aiMessage])
-          setIsTyping(false)
-        }, 2000)
+          },
+        ])
+      } finally {
+        setIsTyping(false)
       }
 
       setNewMessage("")
@@ -318,7 +325,6 @@ export default function ChatPage() {
     if (activeTab === "ai") {
       return (
         <div className="flex flex-col h-full">
-          {/* AI Chat Header */}
           <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="flex items-center gap-3">
               <Avatar className="w-10 h-10">
@@ -337,9 +343,8 @@ export default function ChatPage() {
             </div>
           </div>
 
-          {/* Messages */}
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-4">
+          <ScrollArea className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 300px)" }}>
+            <div className="space-y-4 min-h-full">
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
@@ -405,7 +410,6 @@ export default function ChatPage() {
       if (selectedChat) {
         return (
           <div className="flex flex-col h-full">
-            {/* Selected Chat Header */}
             <div className="p-4 border-b bg-gradient-to-r from-emerald-50 to-teal-50">
               <div className="flex items-center gap-3">
                 <Button variant="ghost" size="sm" onClick={() => setSelectedChat(null)}>
@@ -429,7 +433,6 @@ export default function ChatPage() {
                   </Button>
                 </div>
               </div>
-              {/* Anonymous Mode Toggle */}
               <div className="flex items-center gap-2 mt-3">
                 <Checkbox id="anonymous" checked={isAnonymous} onCheckedChange={setIsAnonymous} />
                 <Label htmlFor="anonymous" className="text-sm text-gray-600">
@@ -439,9 +442,8 @@ export default function ChatPage() {
               </div>
             </div>
 
-            {/* Messages */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
+            <ScrollArea className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 300px)" }}>
+              <div className="space-y-4 min-h-full">
                 {selectedChat.messages?.map((message) => (
                   <motion.div
                     key={message.id}
@@ -482,7 +484,6 @@ export default function ChatPage() {
         )
       }
 
-      // Peer Chat List View
       return (
         <div className="flex flex-col h-full">
           <div className="p-4 border-b">
@@ -529,8 +530,8 @@ export default function ChatPage() {
               </Dialog>
             </div>
           </div>
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-3">
+          <ScrollArea className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 200px)" }}>
+            <div className="space-y-3 min-h-full">
               {mockPeerChats.map((chat) => (
                 <motion.div
                   key={chat.id}
@@ -566,7 +567,6 @@ export default function ChatPage() {
       if (selectedChat) {
         return (
           <div className="flex flex-col h-full">
-            {/* Selected Counselor Chat Header */}
             <div className="p-4 border-b bg-gradient-to-r from-purple-50 to-pink-50">
               <div className="flex items-center gap-3">
                 <Button variant="ghost" size="sm" onClick={() => setSelectedChat(null)}>
@@ -595,9 +595,8 @@ export default function ChatPage() {
               </div>
             </div>
 
-            {/* Messages */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
+            <ScrollArea className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 300px)" }}>
+              <div className="space-y-4 min-h-full">
                 {selectedChat.messages?.map((message) => (
                   <motion.div
                     key={message.id}
@@ -637,22 +636,21 @@ export default function ChatPage() {
         )
       }
 
-      // Counselor Chat List View
       return (
         <div className="flex flex-col h-full">
           <div className="p-4 border-b">
             <h3 className="font-semibold text-gray-900">Professional Counselors</h3>
             <p className="text-sm text-gray-600">Direct communication with licensed professionals</p>
           </div>
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-3">
+          <ScrollArea className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 200px)" }}>
+            <div onClick={() => router.push(`/counsellorchat`)} className="space-y-4 min-h-full">
               {mockCounselorChats.map((chat) => (
                 <motion.div
                   key={chat.id}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100 cursor-pointer hover:shadow-md transition-all"
-                  onClick={() => handleChatSelect(chat)}
+                  onClick={() => router.push(`/counsellorchat`)}
                 >
                   <div className="flex items-center gap-3">
                     <div className="relative">
@@ -733,7 +731,6 @@ export default function ChatPage() {
         </AnimatePresence>
 
         <Card className="h-[600px] overflow-hidden shadow-xl">
-          {/* Tab Switcher */}
           <div className="flex border-b bg-white">
             {[
               { key: "ai", label: "AI Support", icon: Bot, color: "blue" },
@@ -758,11 +755,9 @@ export default function ChatPage() {
             ))}
           </div>
 
-          {/* Chat Content */}
           <div className="h-[calc(100%-60px)] flex flex-col">
-            {renderChatContent()}
+            <div className="flex-1 overflow-hidden">{renderChatContent()}</div>
 
-            {/* Input Bar */}
             {(activeTab === "ai" || selectedChat) && (
               <div className="p-4 border-t bg-white">
                 <div className="flex items-center gap-3">

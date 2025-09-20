@@ -267,8 +267,11 @@ export default function HomePage() {
                 <Link href="/resources" className="block text-muted-foreground hover:text-foreground">
                   Resources
                 </Link>
-                <a href="tel:988" className="block text-muted-foreground hover:text-foreground">
-                  Crisis Line: 988
+                <a href="tel:04424640050" className="block text-muted-foreground hover:text-foreground">
+                  Crisis Line: 044-24640050
+                </a>
+                <a href="mailto:support@mindwell.edu" className="block text-muted-foreground hover:text-foreground">
+                  Email: support@mindwell.edu
                 </a>
               </div>
             </div>

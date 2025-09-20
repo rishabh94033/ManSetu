@@ -20,7 +20,7 @@ const contactMethods = [
     icon: Phone,
     title: "Crisis Support",
     description: "24/7 immediate support",
-    contact: "Call or text 988",
+    contact: "Call or text Sneha India Suicide Prevention Helpline on 044-2464005088",
     urgent: true,
   },
   {
@@ -137,13 +137,13 @@ export default function ContactPage() {
               immediately:
               <div className="mt-2 space-y-1">
                 <div>
-                  • Call or text <strong>988</strong> (Suicide & Crisis Lifeline)
+                  • Sneha India Suicide Prevention Helpline at <strong>044-24640050</strong> (Suicide & Crisis Lifeline)
                 </div>
                 <div>
                   • Text <strong>HOME</strong> to <strong>741741</strong> (Crisis Text Line)
                 </div>
                 <div>
-                  • Call <strong>911</strong> or visit your nearest emergency room
+                  • iCall at <strong>9152987821</strong> or visit your nearest emergency room
                 </div>
               </div>
             </AlertDescription>
