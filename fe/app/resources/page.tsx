@@ -37,6 +37,8 @@ const mockResources = [
     tags: ["mindfulness", "stress-relief", "meditation", "academic"],
     featured: true,
     author: "Dr. Sarah Chen, Clinical Psychologist",
+    link: "https://www.udemy.com/share/102lYe/", // <-- Add this
+
   },
   {
     id: 2,
@@ -51,6 +53,8 @@ const mockResources = [
     tags: ["cbt", "anxiety", "depression", "worksheets"],
     featured: true,
     author: "MindWell Clinical Team",
+        link: "https://cogbtherapy.com/free-online-cbt-workbook", // <-- Add this
+
   },
   {
     id: 3,
@@ -65,6 +69,8 @@ const mockResources = [
     tags: ["sleep", "wellness", "habits", "mental-health"],
     featured: false,
     author: "Dr. Michael Torres, Sleep Specialist",
+        link: "https://findahelpline.com/countries/in", // <-- Add this
+
   },
   {
     id: 4,
@@ -79,6 +85,8 @@ const mockResources = [
     tags: ["meditation", "anxiety", "exams", "focus"],
     featured: false,
     author: "Mindful Campus Initiative",
+        link: "https://teachers.institute/higher-education-the-psycho-social-context/building-healthy-relationships-college-guide/", // <-- Add this
+
   },
   {
     id: 5,
@@ -93,6 +101,8 @@ const mockResources = [
     tags: ["crisis", "emergency", "support", "hotlines"],
     featured: true,
     author: "Campus Counseling Services",
+        link: "https://www.youtube.com/watch?v=5nm7WwS80Xs", // <-- Add this
+
   },
   {
     id: 6,
@@ -107,6 +117,8 @@ const mockResources = [
     tags: ["relationships", "social", "communication", "college"],
     featured: false,
     author: "Dr. Lisa Park, Relationship Counselor",
+        link: "https://www.youtube.com/watch?v=hvPGfcAgk9Y&pp=ygUNU2xlZXAgSHlnaWVuZQ%3D%3D", // <-- Add this
+
   },
 ]
 
@@ -284,13 +296,21 @@ export default function ResourcesPage() {
                           </div>
                           <p className="text-xs text-gray-500">By {resource.author}</p>
                           <div className="flex gap-2">
-                            <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700">
-                              <Download className="h-4 w-4 mr-2" />
-                              Access
-                            </Button>
-                            <Button variant="outline" size="sm">
-                              <ExternalLink className="h-4 w-4" />
-                            </Button>
+                            <Button
+  className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+  onClick={() => window.open(resource.link, "_blank")}
+>
+  <Download className="h-4 w-4 mr-2" />
+  Access
+</Button>
+<Button
+  variant="outline"
+  size="sm"
+  onClick={() => window.open(resource.link, "_blank")}
+>
+  <ExternalLink className="h-4 w-4" />
+</Button>
+
                           </div>
                         </div>
                       </CardContent>
@@ -352,13 +372,22 @@ export default function ResourcesPage() {
                       </div>
                       <p className="text-xs text-gray-500">By {resource.author}</p>
                       <div className="flex gap-2">
-                        <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700">
-                          <Download className="h-4 w-4 mr-2" />
-                          Access
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
+                       <Button
+  className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+  onClick={() => window.open(resource.link, "_blank")}
+>
+  <Download className="h-4 w-4 mr-2" />
+  Access
+</Button>
+
+<Button
+  variant="outline"
+  size="sm"
+  onClick={() => window.open(resource.link, "_blank")}
+>
+  <ExternalLink className="h-4 w-4" />
+</Button>
+
                       </div>
                     </div>
                   </CardContent>

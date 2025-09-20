@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BookOpen, Play, CheckCircle, Clock, Star, Users, Award, Lock } from "lucide-react"
 
 // Mock data for learning modules
+// Mock data for learning modules (updated)
 const mockModules = [
   {
     id: 1,
@@ -25,6 +26,7 @@ const mockModules = [
     completed: false,
     locked: false,
     image: "/mindfulness-meditation.png",
+    link: "https://www.youtube.com/watch?v=nhHrP_Ij1FI&list=PLaeZNCn-A_-ZqZDhlWH6IXupHY1TJ4Ayb&index=7", // Added link
   },
   {
     id: 2,
@@ -40,39 +42,10 @@ const mockModules = [
     completed: false,
     locked: false,
     image: "/cognitive-therapy-brain.jpg",
-  },
-  {
-    id: 3,
-    title: "Stress Management for Students",
-    description:
-      "Practical strategies for managing academic stress, time management, and maintaining work-life balance.",
-    category: "Stress Management",
-    difficulty: "Beginner",
-    duration: "2 weeks",
-    lessons: 10,
-    progress: 100,
-    rating: 4.7,
-    enrolled: 2156,
-    completed: true,
-    locked: false,
-    image: "/student-stress-management.jpg",
-  },
-  {
-    id: 4,
-    title: "Advanced Anxiety Management",
-    description: "Deep dive into anxiety disorders and advanced coping strategies for severe anxiety symptoms.",
-    category: "Anxiety",
-    difficulty: "Advanced",
-    duration: "4 weeks",
-    lessons: 16,
-    progress: 0,
-    rating: 4.9,
-    enrolled: 543,
-    completed: false,
-    locked: true,
-    image: "/anxiety-management-calm.jpg",
+    link: "https://www.youtube.com/watch?v=xkCv34POVxo&list=PL4Qw4-tlRJe-sZ_U4Fzi66UXMGvkPTf7P&index=13", // Added link
   },
 ]
+
 
 const categories = ["All", "Mindfulness", "CBT", "Stress Management", "Anxiety", "Depression", "Sleep"]
 const difficulties = ["All Levels", "Beginner", "Intermediate", "Advanced"]
@@ -206,10 +179,14 @@ export default function ModulesPage() {
                               {module.lessons} lessons
                             </span>
                           </div>
-                          <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
-                            <Play className="h-4 w-4 mr-2" />
-                            Continue Learning
-                          </Button>
+                       <Button
+  className="w-full bg-emerald-600 hover:bg-emerald-700"
+  onClick={() => window.open(module.link, "_blank")} // Opens in new tab
+>
+  <Play className="h-4 w-4 mr-2" />
+  Continue Learning
+</Button>
+
                         </div>
                       </CardContent>
                     </Card>

@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast"
 const mockCounselors = [
   {
     id: 1,
-    name: "Dr. Sarah Chen",
+    name: "Dr. Kulfi",
     title: "Licensed Clinical Psychologist",
     specialties: ["Anxiety", "Depression", "Academic Stress"],
     rating: 4.9,
@@ -31,7 +31,7 @@ const mockCounselors = [
   },
   {
     id: 2,
-    name: "Dr. Michael Torres",
+    name: "Dr. Anshul Gadia",
     title: "Licensed Professional Counselor",
     specialties: ["ADHD", "Sleep Disorders", "Life Transitions"],
     rating: 4.8,
@@ -45,7 +45,7 @@ const mockCounselors = [
   },
   {
     id: 3,
-    name: "Dr. Lisa Park",
+    name: "Dr. Akshay Melon",
     title: "Licensed Marriage & Family Therapist",
     specialties: ["Relationships", "Family Issues", "Cultural Identity"],
     rating: 4.9,
@@ -63,7 +63,7 @@ const mockCounselors = [
 const mockAppointments = [
   {
     id: 1,
-    counselor: "Dr. Sarah Chen",
+    counselor: "Dr. Akshay Melon",
     date: "Today",
     time: "2:00 PM - 3:00 PM",
     type: "Video Session",
@@ -71,7 +71,7 @@ const mockAppointments = [
   },
   {
     id: 2,
-    counselor: "Dr. Michael Torres",
+    counselor: "Dr. Kulfi",
     date: "Tomorrow",
     time: "10:00 AM - 11:00 AM",
     type: "Phone Session",
@@ -353,7 +353,7 @@ export default function TelehealthPage() {
                       <div className="text-center text-white">
                         <Video className="h-16 w-16 mx-auto mb-4 opacity-50" />
                         <p className="text-lg font-medium">Session will start here</p>
-                        <p className="text-sm opacity-75">Your video session with Dr. Sarah Chen</p>
+                        <p className="text-sm opacity-75">Your video session with Dr. Kulfi</p>
                       </div>
                     </div>
 
@@ -375,7 +375,7 @@ export default function TelehealthPage() {
                     <Button onClick={handleJoinSession} className="bg-emerald-600 hover:bg-emerald-700">
                       Join Session Now
                     </Button>
-                    <p className="text-sm text-gray-500 mt-2">Session starts in 5 minutes with Dr. Sarah Chen</p>
+                    <p className="text-sm text-gray-500 mt-2">Session starts in 5 minutes with Dr. Kulfi</p>
                   </div>
                 </CardContent>
               </Card>
