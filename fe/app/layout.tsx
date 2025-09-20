@@ -8,14 +8,14 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "MindWell - Digital Mental Health Support for Students",
+  title: "ManSetu - Digital Mental Health Support for Students",
   description:
     "Comprehensive mental health and psychological support platform designed specifically for students in higher education.",
   generator: "v0.app",
   keywords: ["mental health", "student support", "psychology", "wellbeing", "higher education"],
   authors: [{ name: "MindWell Team" }],
   openGraph: {
-    title: "MindWell - Digital Mental Health Support for Students",
+    title: "ManSetu - Digital Mental Health Support for Students",
     description:
       "Comprehensive mental health and psychological support platform designed specifically for students in higher education.",
     type: "website",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MindWell - Digital Mental Health Support for Students",
+    title: "ManSetu - Digital Mental Health Support for Students",
     description:
       "Comprehensive mental health and psychological support platform designed specifically for students in higher education.",
   },
